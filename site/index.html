@@ -779,7 +779,7 @@ function renderHbars(items, filterType) {
     const filterId = getFilterId(filterType, val1Raw, val2Raw);
     const isActive = activeFilters[filterType].has(filterId) ? 'active' : '';
 
-    return `<div class="hbar-row interactive-row ${isActive}" data-filter-type="${filterType}" data-val1='${val1Raw}' data-val2="${val2Raw}">
+    return `<div class="hbar-row interactive-row ${isActive}" data-filter-type="${filterType}" data-val1='${val1Raw.replace(/'/g, "&apos;")}' data-val2="${val2Raw}">
       <span class="hbar-label">${it.label}</span>
       <div class="hbar-track"><div class="hbar-fill" style="width:${it.pct}%;background:${it.color}"></div></div>
       <span class="hbar-val">${it.val}</span>
