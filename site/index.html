@@ -12,91 +12,100 @@
   --bg2: #12121a;
   --fg: #e0e0e8;
   --fg2: #888894;
-  --sidebar-w: 240px;
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  overflow: hidden;
-  height: 100vh;
 }
 
-/* Система масштабирования интерфейса */
-body.large-font {
-  --sidebar-w: 300px;
-}
-body.large-font #sidebar h1 { font-size: 20px; }
-body.large-font #sidebar .subtitle { font-size: 13px; }
-body.large-font .stat-big { font-size: 34px; }
-body.large-font .stat-section h3 { font-size: 12px; }
-body.large-font .tier-row, body.large-font .hbar-row { font-size: 13px; }
-body.large-font .hbar-label { width: 85px; font-size: 12px; }
-body.large-font .hbar-val { font-size: 12px; }
-body.large-font .tier-pct { font-size: 12px; width: 40px; }
-body.large-font #tooltip { font-size: 15px; max-width: 400px; }
-body.large-font #tooltip .tt-title { font-size: 18px; }
-body.large-font #tooltip .tt-stats { font-size: 14px; }
-body.large-font .btn-action { font-size: 13px; padding: 8px 12px; }
-
-#sidebar {
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: var(--bg2);
-  border-right: 1px solid rgba(255,255,255,0.06);
-  padding: 20px 18px;
-  z-index: 10;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-#sidebar h1 {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.3;
-}
-#sidebar .subtitle {
-  font-size: 11px;
-  color: var(--fg2);
-  margin-top: 4px;
-  line-height: 1.4;
-}
-#sidebar .subtitle a { color: var(--fg2); }
-
-.btn-action {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--fg);
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 11px;
-  margin-top: 10px;
-  transition: background 0.2s, outline 0.2s;
+#wrapper {
+  max-width: 1400px;
   width: 100%;
-  text-align: center;
+  margin: 0 auto;
+  padding-bottom: 250px;
+  transition: max-width 0.2s;
 }
-.btn-action:hover { background: rgba(255,255,255,0.15); }
+
+#header {
+  padding: 20px 28px 16px;
+  flex-shrink: 0;
+}
+
+.intro { margin-bottom: 18px; }
+.intro h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.intro h1 a {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--fg2);
+  text-decoration: none;
+}
+.intro h1 a:hover { text-decoration: underline; }
+.intro p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg2);
+  margin-bottom: 8px;
+}
+.intro a { color: var(--fg2); }
+.intro strong, .intro b { color: var(--fg); font-weight: 600; }
+
+.intro details { margin: 10px 0; }
+.intro summary {
+  font-size: 14px;
+  color: var(--fg2);
+  cursor: pointer;
+  user-select: none;
+}
+.intro summary:hover { color: var(--fg); }
+.intro .prompt-box {
+  margin-top: 8px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--fg2);
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
 
 .stat-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 .stat-section h3 {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--fg2);
 }
 .stat-big {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -106,72 +115,108 @@ body.large-font .btn-action { font-size: 13px; padding: 8px 12px; }
   color: var(--fg2);
 }
 
-.tier-bar, .hbar-chart {
+.tier-bar { display: flex; flex-direction: column; gap: 3px; }
+.tier-row { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.tier-color { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.tier-name { flex: 1; color: var(--fg2); white-space: nowrap; }
+.tier-jobs { text-align: right; white-space: nowrap; }
+.tier-pct { text-align: right; width: 34px; color: var(--fg2); font-size: 11px; }
+
+.histogram { display: flex; align-items: flex-end; gap: 2px; height: 54px; }
+.histogram .bar { flex: 1; border-radius: 1px 1px 0 0; min-height: 1px; }
+.hist-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--fg2); margin-top: 2px; }
+
+.hbar-chart { display: flex; flex-direction: column; gap: 3px; }
+.hbar-row { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.hbar-label { width: 85px; flex-shrink: 0; color: var(--fg2); font-size: 11px; text-align: right; }
+.hbar-track { flex: 1; height: 12px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; min-width: 36px; }
+.hbar-fill { height: 100%; border-radius: 2px; }
+.hbar-val { width: 40px; flex-shrink: 0; font-size: 11px; color: var(--fg); text-align: right; }
+
+.controls-row {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  justify-content: space-between;
 }
 
-.tier-row, .hbar-row {
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.color-toggle {
+  display: flex;
+  gap: 4px;
+}
+.color-toggle button {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--fg2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.color-toggle button.active {
+  background: rgba(255,255,255,0.08);
+  color: var(--fg);
+  border-color: rgba(255,255,255,0.2);
+}
+.color-toggle button:hover:not(.active) {
+  background: rgba(255,255,255,0.04);
+}
+
+.btn-action {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--fg);
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.2s, outline 0.2s, color 0.2s;
+}
+.btn-action:hover { background: rgba(255,255,255,0.15); }
+.btn-danger { color: #f87171; border-color: rgba(248, 113, 113, 0.2); }
+.btn-danger:hover { background: rgba(248, 113, 113, 0.1); color: #fca5a5; }
+
+.gradient-legend {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 11px;
-}
-.tier-color {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.tier-name { flex: 1; color: var(--fg2); }
-.tier-jobs { text-align: right; white-space: nowrap; }
-.tier-pct { text-align: right; width: 32px; color: var(--fg2); font-size: 10px; }
-
-.hbar-label {
-  width: 78px;
-  flex-shrink: 0;
   color: var(--fg2);
-  font-size: 10px;
-  text-align: right;
 }
-.hbar-track {
-  flex: 1;
-  height: 10px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.hbar-fill { height: 100%; border-radius: 2px; }
-.hbar-val {
-  width: 22px;
-  flex-shrink: 0;
-  font-size: 10px;
-  color: var(--fg);
-  text-align: right;
+.gradient-legend canvas { border-radius: 2px; }
+
+canvas#canvas {
+  display: block;
+  cursor: default;
 }
 
-.histogram {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 48px;
-}
-.histogram .bar {
-  flex: 1;
-  border-radius: 1px 1px 0 0;
-  min-height: 1px;
-  position: relative;
-}
-.hist-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 9px;
-  color: var(--fg2);
-  margin-top: 2px;
-}
+/* Система масштабирования интерфейса */
+body.large-font #wrapper { max-width: 1700px; }
+body.large-font .intro h1 { font-size: 28px; }
+body.large-font .intro p { font-size: 17px; }
+body.large-font .stat-big { font-size: 38px; }
+body.large-font .stat-section h3 { font-size: 12px; }
+body.large-font .tier-row, body.large-font .hbar-row { font-size: 14px; }
+body.large-font .hbar-label { width: 95px; font-size: 12px; }
+body.large-font .hbar-val { font-size: 12px; }
+body.large-font .tier-pct { font-size: 12px; width: 40px; }
+body.large-font #tooltip { font-size: 15px; max-width: 400px; }
+body.large-font #tooltip .tt-title { font-size: 18px; }
+body.large-font #tooltip .tt-stats { font-size: 14px; }
 
-/* Интерактивные строки фильтров */
+/* Интерактивные строки мульти-фильтров (Focus+Context) */
 .interactive-row {
   cursor: pointer;
   border-radius: 4px;
@@ -182,24 +227,7 @@ body.large-font .btn-action { font-size: 13px; padding: 8px 12px; }
 .interactive-row:hover { background: rgba(255,255,255,0.08); }
 .interactive-row.active {
   background: rgba(255,255,255,0.12);
-  outline: 1px solid rgba(255,255,255,0.3);
-}
-
-.gradient-legend {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  color: var(--fg2);
-}
-.gradient-legend canvas { border-radius: 2px; }
-
-canvas#canvas {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: var(--sidebar-w);
-  cursor: default;
+  outline: 1px solid rgba(255,255,255,0.4);
 }
 
 #tooltip {
@@ -223,71 +251,91 @@ canvas#canvas {
 #tooltip .tt-stats { display: grid; grid-template-columns: auto auto; gap: 2px 12px; font-size: 12px; }
 #tooltip .tt-stats .label { color: var(--fg2); }
 #tooltip .tt-stats .value { color: var(--fg); text-align: right; }
-#tooltip .tt-rationale {
-  font-size: 11px;
-  color: var(--fg2);
-  margin-top: 8px;
-  line-height: 1.4;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding-top: 8px;
-}
+#tooltip .tt-rationale { font-size: 11px; color: var(--fg2); margin-top: 8px; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; }
 </style>
 </head>
 <body>
 
-<div id="sidebar">
-  <div>
-    <h1>Влияние ИИ на рынок труда США</h1>
-    <div class="subtitle">342 профессии &middot; площадь = занятость &middot; цвет = влияние ИИ<br>Данные от <a href="https://www.bls.gov/ooh/">BLS</a>, оценка Gemini Flash<br><a href="https://github.com/karpathy/jobs">GitHub</a></div>
-    <button id="fontToggle" class="btn-action">Увеличить шрифт</button>
+<div id="wrapper">
+<div id="header">
+  <div class="intro">
+    <h1>Визуализатор рынка труда США <a href="https://github.com/karpathy/jobs">GitHub</a></h1>
+    <p>Это исследовательский инструмент, визуализирующий <b>342 профессии</b> из <a href="https://www.bls.gov/ooh/">Справочника по профессиональным перспективам Бюро статистики труда (BLS)</a>, охватывающий <b>143 млн рабочих мест</b> в экономике США. <b>Площадь</b> каждого прямоугольника пропорциональна общей занятости. <b>Цвет</b> отражает выбранную метрику — переключайтесь между прогнозом роста BLS, медианной зарплатой, требованиями к образованию и уровнем влияния ИИ. Кликните на любую ячейку, чтобы открыть полную страницу BLS. Это не официальный отчет, научная статья или серьезная экономическая публикация — это инструмент для наглядного изучения данных BLS.</p>
+    <p><b>Перекрестная фильтрация:</b> Кликайте по строкам статистики для сегментирования рынка. Выбор нескольких параметров внутри одной панели суммирует результаты (логическое <i>ИЛИ</i>). Выбор параметров из разных панелей (например, Зарплата + Образование) оставляет только строгие пересечения (логическое <i>И</i>). Скрытые сектора остаются на фоне для сохранения макро-пропорций рынка.</p>
+    <p><b>Цветовое кодирование на базе LLM:</b> <a href="https://github.com/karpathy/jobs">Исходный код</a> включает парсеры и конвейер для написания кастомных промптов, позволяющих оценивать и окрашивать профессии по любым критериям. Вы пишете промпт, LLM оценивает каждую профессию, и treemap перекрашивается. Слой «Влияние ИИ» — лишь один из примеров: он оценивает, насколько текущий ИИ (преимущественно цифровой) трансформирует профессию. Но вы можете написать промпт под любую задачу — внедрение робототехники, риск офшоринга, климатическое воздействие — и перезапустить конвейер.</p>
+    <details>
+      <summary>Посмотреть промпт оценки «Цифрового влияния ИИ» (пример)</summary>
+      <div class="prompt-box">Вы являетесь экспертом-аналитиком, оценивающим уязвимость различных профессий к воздействию ИИ. Вам будет предоставлено подробное описание профессии от Бюро статистики труда.
+
+Оцените общее влияние ИИ на профессию по шкале от 0 до 10.
+
+Влияние ИИ (AI Exposure) измеряет: насколько ИИ трансформирует эту профессию? Учитывайте как прямые эффекты (ИИ автоматизирует задачи, выполняемые человеком), так и косвенные (ИИ делает каждого работника настолько продуктивным, что их требуется меньше).
+
+Ключевой сигнал — является ли продукт труда фундаментально цифровым. Если работу можно полностью выполнять из домашнего офиса за компьютером (написание текстов, программирование, анализ, коммуникация), то влияние ИИ по умолчанию высокое (7+), поскольку возможности ИИ в цифровой среде развиваются стремительно. Даже если сегодняшний ИИ не может справиться со всеми аспектами такой работы, траектория его развития крутая, а потолок очень высок. И наоборот, профессии, требующие физического присутствия, ручного труда или взаимодействия с людьми в реальном времени в физическом мире, имеют естественный барьер для ИИ.
+
+Используйте эти якоря для калибровки оценки:
+
+- 0–1: Минимальное влияние. Работа почти полностью физическая, ручная или требует присутствия человека в непредсказуемых условиях в реальном времени. ИИ практически не влияет на повседневную работу. Примеры: кровельщик, ландшафтный дизайнер, водолаз.
+
+- 2–3: Низкое влияние. В основном физическая или межличностная работа. ИИ может помочь с мелкими периферийными задачами (расписание, документы), но не затрагивает основную работу. Примеры: электрик, сантехник, пожарный, стоматолог-гигиенист.
+
+- 4–5: Умеренное влияние. Смесь физической/межличностной и интеллектуальной работы. ИИ может существенно помочь с обработкой информации, но значительная часть работы все еще требует присутствия человека. Примеры: медсестра, полицейский, ветеринар.
+
+- 6–7: Высокое влияние. Преимущественно интеллектуальная работа с некоторой потребностью в человеческом суждении, отношениях или физическом присутствии. ИИ-инструменты уже полезны, и работники, использующие ИИ, могут быть значительно более продуктивными. Примеры: учитель, менеджер, бухгалтер, журналист.
+
+- 8–9: Очень высокое влияние. Работа почти полностью выполняется за компьютером. Все основные задачи (написание, код, анализ, дизайн, коммуникация) находятся в сферах, где ИИ быстро улучшается. Профессия столкнется с серьезной реструктуризацией. Примеры: разработчик ПО, графический дизайнер, переводчик, аналитик данных, помощник юриста, копирайтер.
+
+- 10: Максимальное влияние. Рутинная обработка информации, полностью цифровая, без физической составляющей. ИИ уже сегодня может выполнять большую ее часть. Примеры: оператор ввода данных, телемаркетолог.
+
+Ответьте ТОЛЬКО JSON объектом в точно таком формате, без другого текста:
+{"exposure": &lt;0-10&gt;, "rationale": "&lt;2-3 предложения с объяснением ключевых факторов&gt;"}</div>
+    </details>
+    <p><b>Оговорка по оценкам «Влияния ИИ»:</b> Это грубые оценки LLM, а не строгие прогнозы. Высокий балл не предсказывает исчезновение профессии. Разработчики ПО получают 9/10, так как ИИ трансформирует их работу — но спрос на ПО может легко <em>вырасти</em> по мере роста продуктивности инженеров. Оценка не учитывает эластичность спроса, скрытый спрос, регуляторные барьеры или социальные предпочтения. Многие уязвимые профессии будут трансформированы, а не заменены.</p>
   </div>
 
-  <div class="stat-section">
-    <h3>Всего рабочих мест</h3>
-    <div class="stat-big" id="statTotalJobs">—</div>
+  <div class="controls-row">
+    <div class="controls-left">
+      <div class="stat-section">
+        <h3>Слой визуализации</h3>
+        <div class="color-toggle" id="colorToggle">
+          <button data-mode="outlook" class="active">Прогноз BLS</button>
+          <button data-mode="pay">Медианная зарплата</button>
+          <button data-mode="education">Образование</button>
+          <button data-mode="exposure">Влияние ИИ</button>
+        </div>
+      </div>
+      <div class="gradient-legend">
+        <span id="legendLow">Спад</span>
+        <canvas id="gradientLegend" width="80" height="8"></canvas>
+        <span id="legendHigh">Рост</span>
+      </div>
+    </div>
+    <div class="stat-section">
+      <h3>Интерфейс</h3>
+      <div style="display: flex; gap: 8px;">
+        <button id="fontToggle" class="btn-action">Увеличить шрифт</button>
+        <button id="clearFiltersBtn" class="btn-action btn-danger" style="display: none;">Сбросить фильтры</button>
+      </div>
+    </div>
   </div>
 
-  <div class="stat-section">
-    <h3>Средневзвешенное влияние</h3>
-    <div class="stat-big" id="statAvgExposure">—</div>
-    <div class="stat-label">по рабочим местам, шкала 0–10</div>
-  </div>
-
-  <div class="stat-section">
-    <h3>Рабочие места по уровню влияния</h3>
-    <div class="histogram" id="histogram"></div>
-    <div class="hist-labels"><span>0</span><span>5</span><span>10</span></div>
-  </div>
-
-  <div class="stat-section">
-    <h3>Разбивка по уровням</h3>
-    <div class="tier-bar" id="tierBar"></div>
-  </div>
-
-  <div class="stat-section">
-    <h3>Влияние по уровню зарплаты</h3>
-    <div class="hbar-chart" id="payChart"></div>
-  </div>
-
-  <div class="stat-section">
-    <h3>Влияние по образованию</h3>
-    <div class="hbar-chart" id="eduChart"></div>
-  </div>
-
-  <div class="stat-section">
-    <h3>Уязвимые зарплаты</h3>
-    <div class="stat-big" id="statWages">—</div>
-    <div class="stat-label" id="statWagesDesc">годовой ФОТ профессий высокого риска (7+)</div>
-  </div>
-
-  <div class="gradient-legend">
-    <span>Низкое</span>
-    <canvas id="gradientLegend" width="80" height="8"></canvas>
-    <span>Высокое</span>
+  <div class="stats-row">
+    <div class="stat-section">
+      <h3>Всего рабочих мест</h3>
+      <div class="stat-big" id="statTotalJobs">&mdash;</div>
+    </div>
+    <div class="stat-section" id="block2"></div>
+    <div class="stat-section" id="block3"></div>
+    <div class="stat-section" id="block4"></div>
+    <div class="stat-section" id="block5"></div>
+    <div class="stat-section" id="block6"></div>
+    <div class="stat-section" id="block7"></div>
+    <div class="stat-section" id="block8"></div>
   </div>
 </div>
 
 <canvas id="canvas"></canvas>
+</div>
 
 <div id="tooltip">
   <div class="tt-title"></div>
@@ -297,185 +345,8 @@ canvas#canvas {
 </div>
 
 <script>
-// ── Core Utilities ─────────────────────────────────────────────────────
-function exposureColor(score) {
-  if (score == null) return [128, 128, 128];
-  const t = Math.max(0, Math.min(10, score)) / 10;
-  let r, g, b;
-  if (t < 0.5) {
-    const s = t / 0.5;
-    r = Math.round(50 + s * 180);
-    g = Math.round(160 - s * 10);
-    b = Math.round(50 - s * 20);
-  } else {
-    const s = (t - 0.5) / 0.5;
-    r = Math.round(230 + s * 25);
-    g = Math.round(150 - s * 110);
-    b = Math.round(30 - s * 10);
-  }
-  return [r, g, b];
-}
 
-function exposureColorCSS(score, alpha) {
-  const [r, g, b] = exposureColor(score);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-function formatNumber(n) {
-  if (n == null) return "—";
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + " млн";
-  if (n >= 1000) return Math.round(n / 1000) + " тыс.";
-  return n.toLocaleString('ru-RU');
-}
-
-function formatPay(n) {
-  if (n == null) return "—";
-  return "$" + n.toLocaleString('ru-RU');
-}
-
-// ── Algorithm: Squarified Treemap ──────────────────────────────────────
-function squarify(items, x, y, w, h) {
-  if (items.length === 0) return [];
-  if (items.length === 1) return [{ ...items[0], rx: x, ry: y, rw: w, rh: h }];
-
-  const total = items.reduce((s, d) => s + d.value, 0);
-  if (total === 0) return [];
-
-  const results = [];
-  let remaining = [...items];
-  let cx = x, cy = y, cw = w, ch = h;
-
-  while (remaining.length > 0) {
-    const remTotal = remaining.reduce((s, d) => s + d.value, 0);
-    const vertical = cw >= ch;
-    const side = vertical ? ch : cw;
-
-    let row = [remaining[0]];
-    let rowSum = remaining[0].value;
-
-    for (let i = 1; i < remaining.length; i++) {
-      const candidate = [...row, remaining[i]];
-      const candidateSum = rowSum + remaining[i].value;
-      if (worstAspect(candidate, candidateSum, side, remTotal, vertical ? cw : ch) <
-          worstAspect(row, rowSum, side, remTotal, vertical ? cw : ch)) {
-        row = candidate;
-        rowSum = candidateSum;
-      } else {
-        break;
-      }
-    }
-
-    const rowFraction = rowSum / remTotal;
-    const rowThickness = vertical ? cw * rowFraction : ch * rowFraction;
-
-    let offset = 0;
-    for (const item of row) {
-      const itemFraction = item.value / rowSum;
-      const itemLength = side * itemFraction;
-      if (vertical) {
-        results.push({ ...item, rx: cx, ry: cy + offset, rw: rowThickness, rh: itemLength });
-      } else {
-        results.push({ ...item, rx: cx + offset, ry: cy, rw: itemLength, rh: rowThickness });
-      }
-      offset += itemLength;
-    }
-
-    if (vertical) { cx += rowThickness; cw -= rowThickness; } 
-    else { cy += rowThickness; ch -= rowThickness; }
-
-    remaining = remaining.slice(row.length);
-  }
-  return results;
-}
-
-function worstAspect(row, rowSum, side, totalArea, availableExtent) {
-  const rowExtent = availableExtent * (rowSum / totalArea);
-  if (rowExtent === 0) return Infinity;
-  let worst = 0;
-  for (const item of row) {
-    const itemLen = side * (item.value / rowSum);
-    if (itemLen === 0) continue;
-    const aspect = Math.max(rowExtent / itemLen, itemLen / rowExtent);
-    if (aspect > worst) worst = aspect;
-  }
-  return worst;
-}
-
-// ── State & Rendering ──────────────────────────────────────────────────
-let data = [];
-let rects = [];
-let hovered = null;
-let currentFilter = null; 
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-let dpr = window.devicePixelRatio || 1;
-
-const MARGIN = 12;
-const GAP = 1.5;
-
-function layout() {
-  const sidebarW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w'));
-  const w = (window.innerWidth - sidebarW);
-  const h = window.innerHeight;
-
-  canvas.width = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.width = w + "px";
-  canvas.style.height = h + "px";
-
-  const tx = MARGIN;
-  const ty = MARGIN;
-  const tw = w - MARGIN * 2;
-  const th = h - MARGIN * 2;
-
-  // АРХИТЕКТУРНОЕ ИСПРАВЛЕНИЕ: Компоновка всегда происходит по полному массиву `data`.
-  // Это сохраняет константную площадь (макро-маппинг), не искажая визуальное восприятие рынка при фильтрации.
-  const byCategory = {};
-  for (const d of data) {
-    const cat = d.category;
-    if (!byCategory[cat]) byCategory[cat] = [];
-    byCategory[cat].push(d);
-  }
-
-  const categories = Object.keys(byCategory).map(cat => ({
-    cat,
-    items: byCategory[cat].sort((a, b) => (b.jobs || 0) - (a.jobs || 0)),
-    value: byCategory[cat].reduce((s, d) => s + (d.jobs || 1), 0),
-  })).sort((a, b) => b.value - a.value);
-
-  const catRects = squarify(categories, tx, ty, tw, th);
-
-  rects = [];
-  for (const cr of catRects) {
-    const innerGap = GAP;
-    const items = cr.items.map(d => ({ ...d, value: d.jobs || 1 }));
-    const innerRects = squarify(items,
-      cr.rx + innerGap, cr.ry + innerGap,
-      cr.rw - innerGap * 2, cr.rh - innerGap * 2
-    );
-    for (const ir of innerRects) {
-      rects.push(ir);
-    }
-  }
-}
-
-// Проверка элемента на соответствие активному фильтру (слой данных)
-function isNodeMatchingFilter(node, filter) {
-  if (!filter) return true;
-  if (filter.type === 'tier') {
-    return node.exposure != null && node.exposure >= filter.val1 && node.exposure <= filter.val2;
-  }
-  if (filter.type === 'pay') {
-    return node.pay != null && node.pay >= filter.val1 && node.pay < filter.val2;
-  }
-  if (filter.type === 'edu') {
-    return filter.parsedVal.includes(node.education);
-  }
-  return true;
-}
-
-// Словари для локализации категориальных данных из внешнего JSON
+// ── Словари L10n ────────────────────────────────────────────────────────
 const eduTranslate = {
   "No formal educational credential": "Без формального образования",
   "High school diploma or equivalent": "Среднее образование",
@@ -496,64 +367,276 @@ const outlookTranslate = {
   "Much faster than average": "Значительно выше среднего"
 };
 
+// ── Color scales ────────────────────────────────────────────────────────
+
+let colorMode = "outlook";
+
+function boostContrast(t) {
+  const c = (t - 0.5) * 2;
+  const b = Math.sign(c) * Math.pow(Math.abs(c), 0.55);
+  return b / 2 + 0.5;
+}
+
+function greenRedCSS(t, alpha) {
+  t = boostContrast(Math.max(0, Math.min(1, t)));
+  let r, g, b;
+  if (t < 0.5) {
+    const s = t / 0.5;
+    r = Math.round(30 + s * 200);
+    g = Math.round(180 - s * 20);
+    b = Math.round(40 - s * 20);
+  } else {
+    const s = (t - 0.5) / 0.5;
+    r = Math.round(230 + s * 25);
+    g = Math.round(160 - s * 130);
+    b = Math.round(20 - s * 5);
+  }
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+const EDU_LEVELS = [
+  "No formal educational credential",
+  "High school diploma or equivalent",
+  "Postsecondary nondegree award",
+  "Some college, no degree",
+  "Associate's degree",
+  "Bachelor's degree",
+  "Master's degree",
+  "Doctoral or professional degree",
+];
+
+function outlookColor(v, a) {
+  if (v == null) return `rgba(128,128,128,${a})`;
+  return greenRedCSS(1 - Math.max(0, Math.min(1, (v + 12) / 24)), a);
+}
+function payColor(v, a) {
+  if (v == null) return `rgba(128,128,128,${a})`;
+  const t = 1 - (Math.log(Math.max(25000, Math.min(250000, v))) - Math.log(25000)) / (Math.log(250000) - Math.log(25000));
+  return greenRedCSS(t, a);
+}
+function eduColor(idx, a) {
+  if (idx < 0) return `rgba(128,128,128,${a})`;
+  return greenRedCSS(1 - idx / (EDU_LEVELS.length - 1), a);
+}
+function exposureColor(v, a) {
+  if (v == null) return `rgba(128,128,128,${a})`;
+  return greenRedCSS(v / 10, a);
+}
+
+function tileColorCSS(d, alpha) {
+  if (colorMode === "exposure") return exposureColor(d.exposure, alpha);
+  if (colorMode === "outlook") return outlookColor(d.outlook, alpha);
+  if (colorMode === "pay") return payColor(d.pay, alpha);
+  if (colorMode === "education") {
+    return eduColor(EDU_LEVELS.indexOf(d.education), alpha);
+  }
+  return `rgba(128,128,128,${alpha})`;
+}
+
+function tileSubInfo(r) {
+  if (colorMode === "exposure") {
+    return (r.exposure != null ? r.exposure + "/10" : "") +
+           (r.jobs ? " \u00b7 " + formatNumber(r.jobs) + " мест" : "");
+  }
+  if (colorMode === "outlook") {
+    const o = r.outlook != null ? (r.outlook > 0 ? "+" : "") + r.outlook + "%" : "";
+    return o + (r.jobs ? " \u00b7 " + formatNumber(r.jobs) + " мест" : "");
+  }
+  if (colorMode === "pay") {
+    return (r.pay != null ? formatPay(r.pay) : "") +
+           (r.jobs ? " \u00b7 " + formatNumber(r.jobs) + " мест" : "");
+  }
+  if (colorMode === "education") {
+    const short = {
+      "No formal educational credential": "Без формального",
+      "High school diploma or equivalent": "Среднее",
+      "Postsecondary nondegree award": "Ср.спец.",
+      "Some college, no degree": "Неоконченное",
+      "Associate's degree": "Мл.спец.",
+      "Bachelor's degree": "Бакалавриат",
+      "Master's degree": "Магистратура",
+      "Doctoral or professional degree": "Докторантура/Проф.",
+    }[r.education] || "";
+    return short + (r.jobs ? " \u00b7 " + formatNumber(r.jobs) + " мест" : "");
+  }
+  return "";
+}
+
+// ── Squarified treemap layout ──────────────────────────────────────────
+
+function squarify(items, x, y, w, h) {
+  if (items.length === 0) return [];
+  if (items.length === 1) return [{ ...items[0], rx: x, ry: y, rw: w, rh: h }];
+  const total = items.reduce((s, d) => s + d.value, 0);
+  if (total === 0) return [];
+  const results = [];
+  let remaining = [...items], cx = x, cy = y, cw = w, ch = h;
+  while (remaining.length > 0) {
+    const remTotal = remaining.reduce((s, d) => s + d.value, 0);
+    const vertical = cw >= ch;
+    const side = vertical ? ch : cw;
+    let row = [remaining[0]], rowSum = remaining[0].value;
+    for (let i = 1; i < remaining.length; i++) {
+      const candidate = [...row, remaining[i]];
+      const candidateSum = rowSum + remaining[i].value;
+      if (worstAspect(candidate, candidateSum, side, remTotal, vertical ? cw : ch) <
+          worstAspect(row, rowSum, side, remTotal, vertical ? cw : ch)) {
+        row = candidate; rowSum = candidateSum;
+      } else break;
+    }
+    const rowFraction = rowSum / remTotal;
+    const rowThickness = vertical ? cw * rowFraction : ch * rowFraction;
+    let offset = 0;
+    for (const item of row) {
+      const itemFraction = item.value / rowSum;
+      const itemLength = side * itemFraction;
+      if (vertical) results.push({ ...item, rx: cx, ry: cy + offset, rw: rowThickness, rh: itemLength });
+      else results.push({ ...item, rx: cx + offset, ry: cy, rw: itemLength, rh: rowThickness });
+      offset += itemLength;
+    }
+    if (vertical) { cx += rowThickness; cw -= rowThickness; }
+    else { cy += rowThickness; ch -= rowThickness; }
+    remaining = remaining.slice(row.length);
+  }
+  return results;
+}
+
+function worstAspect(row, rowSum, side, totalArea, availableExtent) {
+  const rowExtent = availableExtent * (rowSum / totalArea);
+  if (rowExtent === 0) return Infinity;
+  let worst = 0;
+  for (const item of row) {
+    const itemLen = side * (item.value / rowSum);
+    if (itemLen === 0) continue;
+    const aspect = Math.max(rowExtent / itemLen, itemLen / rowExtent);
+    if (aspect > worst) worst = aspect;
+  }
+  return worst;
+}
+
+// ── Rendering, State & Multi-Filtering ─────────────────────────────────
+
+let data = [];
+let rects = [];
+let hovered = null;
+
+// Состояние системы переведено на хранение множеств (Set/Map) для комбинаторики
+let activeFilters = {
+  exposure: new Map(),
+  outlook: new Map(),
+  pay: new Map(),
+  edu: new Map()
+};
+
+function getFilterId(type, val1, val2) {
+  return `${type}_${val1}_${val2}`;
+}
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let dpr = window.devicePixelRatio || 1;
+const MARGIN = 12, GAP = 1.5;
+
+function layout() {
+  const wrapper = document.getElementById("wrapper");
+  const w = wrapper.clientWidth;
+  const h = Math.round(w * 3 / 4);
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  canvas.style.width = w + "px"; canvas.style.height = h + "px";
+  const tx = MARGIN, ty = MARGIN, tw = w - MARGIN * 2, th = h - MARGIN * 2;
+  
+  // Компоновка всегда по полному массиву данных (сохраняем макро-площадь)
+  const byCategory = {};
+  for (const d of data) { if (!byCategory[d.category]) byCategory[d.category] = []; byCategory[d.category].push(d); }
+  const categories = Object.keys(byCategory).map(cat => ({
+    cat, items: byCategory[cat].sort((a, b) => (b.jobs || 0) - (a.jobs || 0)),
+    value: byCategory[cat].reduce((s, d) => s + (d.jobs || 1), 0),
+  })).sort((a, b) => b.value - a.value);
+  
+  const catRects = squarify(categories, tx, ty, tw, th);
+  rects = [];
+  for (const cr of catRects) {
+    const items = cr.items.map(d => ({ ...d, value: d.jobs || 1 }));
+    const innerRects = squarify(items, cr.rx + GAP, cr.ry + GAP, cr.rw - GAP * 2, cr.rh - GAP * 2);
+    for (const ir of innerRects) rects.push(ir);
+  }
+}
+
+// Движок кросс-фильтрации: Внутри слоя = ИЛИ (OR), Между слоями = И (AND)
+function isNodeMatchingFilters(node) {
+  const hasAnyFilters = Object.values(activeFilters).some(map => map.size > 0);
+  if (!hasAnyFilters) return true;
+
+  // Логика AND между разными категориями
+  for (const type in activeFilters) {
+    const filterMap = activeFilters[type];
+    if (filterMap.size === 0) continue; // Если категория пуста, она не ограничивает узел
+
+    let matchesCategory = false;
+    // Логика OR внутри конкретной категории
+    for (const filter of filterMap.values()) {
+      if (type === 'exposure') {
+        if (node.exposure != null && node.exposure >= filter.val1 && node.exposure <= filter.val2) matchesCategory = true;
+      } else if (type === 'pay') {
+        if (node.pay != null && node.pay >= filter.val1 && node.pay < filter.val2) matchesCategory = true;
+      } else if (type === 'outlook') {
+        if (node.outlook != null && node.outlook >= filter.val1 && node.outlook <= filter.val2) matchesCategory = true;
+      } else if (type === 'edu') {
+        if (filter.parsedVal && filter.parsedVal.includes(node.education)) matchesCategory = true;
+      }
+    }
+    // Если узел не совпал ни с одним активным чипом в категории, он бракуется полностью
+    if (!matchesCategory) return false;
+  }
+  return true;
+}
+
 function draw() {
-  const w = canvas.width;
-  const h = canvas.height;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = "#0a0a0f";
-  ctx.fillRect(0, 0, w / dpr, h / dpr);
+  ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
 
   const isLargeFont = document.body.classList.contains('large-font');
-  const fontBoost = isLargeFont ? 3 : 0;
+  const fontBoost = isLargeFont ? 2 : 0;
+  const hasAnyFilters = Object.values(activeFilters).some(map => map.size > 0);
 
   for (const r of rects) {
     const isHovered = r === hovered;
-    const isMatched = isNodeMatchingFilter(r, currentFilter);
+    const isMatched = isNodeMatchingFilters(r);
 
-    const g = GAP / 2;
-    const rx = r.rx + g;
-    const ry = r.ry + g;
-    const rw = r.rw - g * 2;
-    const rh = r.rh - g * 2;
-
+    const g = GAP / 2, rx = r.rx + g, ry = r.ry + g, rw = r.rw - g * 2, rh = r.rh - g * 2;
     if (rw <= 0 || rh <= 0) continue;
 
-    // АРХИТЕКТУРНОЕ ИСПРАВЛЕНИЕ: Фокус + Контекст. 
-    // Элементы, не попавшие в фильтр, теряют яркость, но сохраняют занимаемую площадь.
-    let fillAlpha = isMatched ? 0.6 : 0.05;
-    if (isHovered && isMatched) fillAlpha = 0.9;
-    else if (isHovered && !isMatched) fillAlpha = 0.2;
-
-    ctx.fillStyle = exposureColorCSS(r.exposure, fillAlpha);
-    ctx.fillRect(rx, ry, rw, rh);
-
-    if (isHovered) {
-      ctx.strokeStyle = isMatched ? "#fff" : "rgba(255,255,255,0.3)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(rx, ry, rw, rh);
+    let fillAlpha;
+    if (!hasAnyFilters) {
+       fillAlpha = isHovered ? 0.95 : 0.6; // Обычный режим
+    } else {
+       // Режим Focus+Context (увеличенный контраст для среза данных)
+       fillAlpha = isMatched ? 0.8 : 0.03; 
+       if (isHovered) fillAlpha = isMatched ? 1.0 : 0.1;
     }
 
-    const minW = 50;
-    const minH = 18;
-    // Отрисовка текста только для элементов в фокусе или если фильтр сброшен
-    if (rw > minW && rh > minH && isMatched) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(rx + 4, ry + 2, rw - 8, rh - 4);
-      ctx.clip();
+    ctx.fillStyle = tileColorCSS(r, fillAlpha);
+    ctx.fillRect(rx, ry, rw, rh);
 
+    if (isHovered) { 
+      ctx.strokeStyle = isMatched ? "#fff" : "rgba(255,255,255,0.3)"; 
+      ctx.lineWidth = 2; 
+      ctx.strokeRect(rx, ry, rw, rh); 
+    }
+
+    if (rw > 50 && rh > 18 && isMatched) {
+      ctx.save(); ctx.beginPath(); ctx.rect(rx + 4, ry + 2, rw - 8, rh - 4); ctx.clip();
       const fontSize = Math.min(13 + fontBoost, Math.max(9 + fontBoost, Math.min(rw / 10, rh / 3)));
       ctx.font = `500 ${fontSize}px -apple-system, system-ui, sans-serif`;
-      ctx.fillStyle = isHovered ? "#fff" : "rgba(255,255,255,0.85)";
+      ctx.fillStyle = isHovered ? "#fff" : (hasAnyFilters ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.85)");
       ctx.textBaseline = "top";
       ctx.fillText(r.title, rx + 5, ry + 4);
 
       if (rh > 34 && rw > 60) {
-        const info = (r.exposure != null ? r.exposure + "/10" : "") +
-                     (r.jobs ? " \u00b7 " + formatNumber(r.jobs) + " мест" : "");
         ctx.font = `400 ${Math.max(8 + fontBoost, fontSize - 2)}px -apple-system, system-ui, sans-serif`;
         ctx.fillStyle = "rgba(255,255,255,0.5)";
-        ctx.fillText(info, rx + 5, ry + 4 + fontSize + 2);
+        ctx.fillText(tileSubInfo(r), rx + 5, ry + 4 + fontSize + 2);
       }
       ctx.restore();
     }
@@ -561,180 +644,392 @@ function draw() {
 }
 
 function hitTest(mx, my) {
-  const sidebarW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w'));
-  const cx = mx - sidebarW;
-  const cy = my;
+  const rect = canvas.getBoundingClientRect();
+  const cx = mx - rect.left, cy = my - rect.top;
   for (let i = rects.length - 1; i >= 0; i--) {
     const r = rects[i];
-    if (cx >= r.rx && cx < r.rx + r.rw && cy >= r.ry && cy < r.ry + r.rh) {
-      return r;
-    }
+    if (cx >= r.rx && cx < r.rx + r.rw && cy >= r.ry && cy < r.ry + r.rh) return r;
   }
   return null;
 }
 
-// ── UI Interaction ─────────────────────────────────────────────────────
+function formatNumber(n) {
+  if (n == null) return "—";
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + " млн";
+  if (n >= 1e3) return Math.round(n / 1e3) + " тыс.";
+  return n.toLocaleString('ru-RU');
+}
+function formatPay(n) { return n == null ? "—" : "$" + n.toLocaleString('ru-RU'); }
+
+function tooltipHighlight(d) {
+  if (colorMode === "exposure") {
+    const v = d.exposure;
+    if (v == null) return "";
+    const color = exposureColor(v, 1);
+    return `<span style="color:${color};font-weight:600;">Влияние ИИ: ${v}/10</span>` +
+      `<div style="margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;">` +
+      `<div style="height:100%;width:${v * 10}%;background:${color};border-radius:2px;"></div></div>`;
+  } else if (colorMode === "outlook") {
+    const v = d.outlook;
+    if (v == null) return "";
+    const color = outlookColor(v, 1);
+    const localizedDesc = outlookTranslate[d.outlook_desc] || d.outlook_desc;
+    return `<span style="color:${color};font-weight:600;">Прогноз: ${v > 0 ? '+' : ''}${v}%</span>` +
+      (localizedDesc ? ` <span style="color:var(--fg2);">(${localizedDesc})</span>` : '') +
+      `<div style="margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;">` +
+      `<div style="height:100%;width:${Math.min(100, Math.max(0, (v + 10) / 30 * 100))}%;background:${color};border-radius:2px;"></div></div>`;
+  } else if (colorMode === "pay") {
+    const v = d.pay;
+    if (v == null) return "";
+    const color = payColor(v, 1);
+    return `<span style="color:${color};font-weight:600;">Медианная зарплата: ${formatPay(v)}</span>` +
+      `<div style="margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;">` +
+      `<div style="height:100%;width:${Math.min(100, v / 150000 * 100)}%;background:${color};border-radius:2px;"></div></div>`;
+  } else if (colorMode === "education") {
+    const edu = d.education || "";
+    const localizedEdu = eduTranslate[edu] || edu;
+    const idx = EDU_LEVELS.indexOf(edu);
+    const color = idx >= 0 ? eduColor(idx, 1) : "var(--fg)";
+    return `<span style="color:${color};font-weight:600;">Образование: ${localizedEdu || '—'}</span>`;
+  }
+  return "";
+}
+
 function showTooltip(d, mx, my) {
   const tt = document.getElementById("tooltip");
   tt.querySelector(".tt-title").textContent = d.title;
-
-  const score = d.exposure != null ? d.exposure : null;
-  if (score != null) {
-    const barWidth = score * 10;
-    const color = exposureColorCSS(score, 1);
-    tt.querySelector(".tt-exposure").innerHTML =
-      `<span style="color:${color};font-weight:600;">Влияние ИИ: ${score}/10</span>` +
-      `<div style="margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;">` +
-      `<div style="height:100%;width:${barWidth}%;background:${color};border-radius:2px;"></div></div>`;
-  } else {
-    tt.querySelector(".tt-exposure").innerHTML = "";
-  }
-
-  const localizedEdu = eduTranslate[d.education] || d.education || '—';
-  const localizedOutlookDesc = outlookTranslate[d.outlook_desc] || d.outlook_desc || '';
+  tt.querySelector(".tt-exposure").innerHTML = tooltipHighlight(d);
+  
+  const localizedEdu = eduTranslate[d.education] || d.education;
+  const localizedOutlook = outlookTranslate[d.outlook_desc] || d.outlook_desc;
 
   tt.querySelector(".tt-stats").innerHTML = `
     <span class="label">Медианная зарплата</span><span class="value">${formatPay(d.pay)}</span>
     <span class="label">Рабочих мест (2024)</span><span class="value">${formatNumber(d.jobs)}</span>
-    <span class="label">Прогноз</span><span class="value">${d.outlook != null ? d.outlook + '%' : '—'} ${localizedOutlookDesc ? '(' + localizedOutlookDesc + ')' : ''}</span>
-    <span class="label">Образование</span><span class="value">${localizedEdu}</span>
-  `;
-  tt.querySelector(".tt-rationale").textContent = d.exposure_rationale || "";
-
-  const pad = 16;
-  let tx = mx + pad;
-  let ty = my - pad;
-  if (tx + 340 > window.innerWidth) tx = mx - 340 - pad;
-  if (ty < 10) ty = my + pad;
+    <span class="label">Прогноз</span><span class="value">${d.outlook != null ? d.outlook + '%' : '—'} ${localizedOutlook ? '(' + localizedOutlook + ')' : ''}</span>
+    <span class="label">Образование</span><span class="value">${localizedEdu || '—'}</span>`;
+  
+  tt.querySelector(".tt-rationale").innerHTML = d.exposure_rationale ? `<b>Обоснование ИИ:</b> ${d.exposure_rationale}` : "";
+  
+  let tx = mx + 16, ty = my - 16;
+  if (tx + 340 > window.innerWidth) tx = mx - 356;
+  if (ty < 10) ty = my + 16;
   if (ty + 200 > window.innerHeight) ty = my - 200;
-
-  tt.style.left = tx + "px";
-  tt.style.top = ty + "px";
+  tt.style.left = tx + "px"; tt.style.top = ty + "px";
   tt.classList.add("visible");
 }
+function hideTooltip() { document.getElementById("tooltip").classList.remove("visible"); }
 
-function hideTooltip() {
-  document.getElementById("tooltip").classList.remove("visible");
+// ── Shared stat data ────────────────────────────────────────────────────
+
+const PAY_BANDS = [
+  { label: "<$35 тыс.", min: 0, max: 35000 },
+  { label: "$35–50 тыс.", min: 35000, max: 50000 },
+  { label: "$50–75 тыс.", min: 50000, max: 75000 },
+  { label: "$75–100 тыс.", min: 75000, max: 100000 },
+  { label: "$100 тыс.+", min: 100000, max: Infinity },
+];
+
+const EDU_GROUPS = [
+  { label: "Без степени/Школа", match: ["No formal educational credential", "High school diploma or equivalent"] },
+  { label: "Ср.спец./Мл.спец.", match: ["Postsecondary nondegree award", "Some college, no degree", "Associate's degree"] },
+  { label: "Бакалавриат", match: ["Bachelor's degree"] },
+  { label: "Магистратура", match: ["Master's degree"] },
+  { label: "Докторантура/Проф.", match: ["Doctoral or professional degree"] },
+];
+
+const OUTLOOK_TIERS = [
+  { label: "Спад (<0%)", min: -Infinity, max: -1 },
+  { label: "Медленный (0–3%)", min: 0, max: 3 },
+  { label: "Средний (4–7%)", min: 4, max: 7 },
+  { label: "Быстрый (8–14%)", min: 8, max: 14 },
+  { label: "Очень быстрый (15%+)", min: 15, max: Infinity },
+];
+
+function weightedAvgByGroups(groups, filterFn, metricFn) {
+  return groups.map(g => {
+    let wS = 0, wC = 0;
+    for (const d of data) {
+      const v = metricFn(d);
+      if (v != null && d.jobs && filterFn(d, g)) { wS += v * d.jobs; wC += d.jobs; }
+    }
+    return { ...g, avg: wC > 0 ? wS / wC : 0, jobs: wC };
+  });
 }
 
-function computeStats() {
+function renderTiers(tiers, totalJobs, filterType) {
+  return tiers.map(t => {
+    const val1 = t.min !== undefined ? t.min : t.lo;
+    const val2 = t.max !== undefined ? t.max : t.hi;
+    const filterId = getFilterId(filterType, val1, val2);
+    const isActive = activeFilters[filterType].has(filterId) ? 'active' : '';
+
+    return `<div class="tier-row interactive-row ${isActive}" data-filter-type="${filterType}" data-val1="${val1}" data-val2="${val2}">
+      <div class="tier-color" style="background:${t.color}"></div>
+      <span class="tier-name">${t.label}</span>
+      <span class="tier-jobs">${formatNumber(t.jobs)}</span>
+      <span class="tier-pct">${totalJobs > 0 ? (t.jobs / totalJobs * 100).toFixed(0) : 0}%</span>
+    </div>`;
+  }).join("");
+}
+
+function renderHbars(items, filterType) {
+  return items.map(it => {
+    const val1Raw = it.match ? JSON.stringify(it.match) : (it.min !== undefined ? it.min : (it.lo !== undefined ? it.lo : ''));
+    const val2Raw = it.max !== undefined ? it.max : (it.hi !== undefined ? it.hi : '');
+    const filterId = getFilterId(filterType, val1Raw, val2Raw);
+    const isActive = activeFilters[filterType].has(filterId) ? 'active' : '';
+
+    return `<div class="hbar-row interactive-row ${isActive}" data-filter-type="${filterType}" data-val1='${val1Raw}' data-val2="${val2Raw}">
+      <span class="hbar-label">${it.label}</span>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${it.pct}%;background:${it.color}"></div></div>
+      <span class="hbar-val">${it.val}</span>
+    </div>`;
+  }).join("");
+}
+
+// ── Layer-specific stats ────────────────────────────────────────────────
+
+function updateStats() {
   const totalJobs = data.reduce((s, d) => s + (d.jobs || 0), 0);
-  let weightedSum = 0, weightedCount = 0;
+  document.getElementById("statTotalJobs").textContent = (totalJobs / 1e6).toFixed(1) + " млн";
+
+  if (colorMode === "outlook") updateOutlookStats(totalJobs);
+  else if (colorMode === "pay") updatePayStats(totalJobs);
+  else if (colorMode === "education") updateEducationStats(totalJobs);
+  else updateExposureStats(totalJobs);
+}
+
+function updateOutlookStats(totalJobs) {
+  let wS = 0, wC = 0;
+  for (const d of data) { if (d.outlook != null && d.jobs) { wS += d.outlook * d.jobs; wC += d.jobs; } }
+  const avg = wC > 0 ? wS / wC : 0;
+  document.getElementById("block2").innerHTML = `<h3>Ср. прогноз</h3>
+    <div class="stat-big"><span style="color:${outlookColor(avg, 1)}">${avg > 0 ? "+" : ""}${avg.toFixed(1)}%</span></div>
+    <div class="stat-label">взвешенный</div>`;
+
+  const buckets = [
+    { lo: -Infinity, hi: -1, mid: -5 }, { lo: 0, hi: 2, mid: 1 }, { lo: 3, hi: 5, mid: 4 },
+    { lo: 6, hi: 8, mid: 7 }, { lo: 9, hi: 14, mid: 11 }, { lo: 15, hi: Infinity, mid: 20 },
+  ];
+  const histJobs = buckets.map(() => 0);
+  for (const d of data) { if (d.outlook != null && d.jobs) { const i = buckets.findIndex(b => d.outlook >= b.lo && d.outlook <= b.hi); if (i >= 0) histJobs[i] += d.jobs; } }
+  const maxH = Math.max(...histJobs);
+  document.getElementById("block3").innerHTML = `<h3>Места по прогнозу</h3>
+    <div class="histogram">${histJobs.map((c, i) => `<div class="bar" style="height:${Math.max(2, maxH > 0 ? c / maxH * 100 : 0)}%;background:${outlookColor(buckets[i].mid, 0.7)}"></div>`).join("")}</div>
+    <div class="hist-labels"><span>&lt;0%</span><span>5%</span><span>15%+</span></div>`;
+
+  const tiers = OUTLOOK_TIERS.map(t => {
+    let jobs = 0;
+    for (const d of data) { if (d.outlook != null && d.jobs && d.outlook >= t.min && d.outlook <= t.max) jobs += d.jobs; }
+    return { ...t, jobs, color: outlookColor((t.min === -Infinity ? -8 : t.max === Infinity ? 20 : (t.min + t.max) / 2), 1) };
+  });
+  document.getElementById("block4").innerHTML = `<h3>Категории прогноза</h3><div class="tier-bar">${renderTiers(tiers, totalJobs, 'outlook')}</div>`;
+
+  const byPay = weightedAvgByGroups(PAY_BANDS, (d, g) => d.pay != null && d.pay >= g.min && d.pay < g.max, d => d.outlook);
+  document.getElementById("block5").innerHTML = `<h3>Прогноз по зарплате</h3><div class="hbar-chart">${renderHbars(byPay.map(g => ({
+    ...g, val: (g.avg > 0 ? "+" : "") + g.avg.toFixed(1) + "%", pct: Math.max(0, Math.min(100, (g.avg + 10) / 30 * 100)), color: outlookColor(g.avg, 0.8)
+  })), 'pay')}</div>`;
+
+  const byEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d.outlook);
+  document.getElementById("block6").innerHTML = `<h3>Прогноз по образованию</h3><div class="hbar-chart">${renderHbars(byEdu.map(g => ({
+    ...g, val: (g.avg > 0 ? "+" : "") + g.avg.toFixed(1) + "%", pct: Math.max(0, Math.min(100, (g.avg + 10) / 30 * 100)), color: outlookColor(g.avg, 0.8)
+  })), 'edu')}</div>`;
+
+  let declining = 0;
+  for (const d of data) { if (d.outlook != null && d.outlook < 0 && d.jobs) declining += d.jobs; }
+  document.getElementById("block7").innerHTML = `<h3>Сокращающиеся</h3>
+    <div class="stat-big" style="color:${outlookColor(-5, 1)}">${(declining / 1e6).toFixed(1)} млн</div>
+    <div class="stat-label">с негативным прогнозом</div>`;
+
+  let growing = 0;
+  for (const d of data) { if (d.outlook != null && d.outlook > 0 && d.jobs) growing += d.jobs; }
+  document.getElementById("block8").innerHTML = `<h3>Растущие</h3>
+    <div class="stat-big" style="color:${outlookColor(10, 1)}">${(growing / 1e6).toFixed(1)} млн</div>
+    <div class="stat-label">с позитивным прогнозом</div>`;
+}
+
+function updatePayStats(totalJobs) {
+  let wS = 0, wC = 0;
+  for (const d of data) { if (d.pay != null && d.jobs) { wS += d.pay * d.jobs; wC += d.jobs; } }
+  const avg = wC > 0 ? wS / wC : 0;
+  document.getElementById("block2").innerHTML = `<h3>Ср. зарплата</h3>
+    <div class="stat-big"><span style="color:${payColor(avg, 1)}">$${Math.round(avg / 1000)} тыс.</span></div>
+    <div class="stat-label">взвешенная</div>`;
+
+  const buckets = [
+    { lo: 0, hi: 30000, mid: 25000 }, { lo: 30000, hi: 40000, mid: 35000 }, { lo: 40000, hi: 55000, mid: 47000 },
+    { lo: 55000, hi: 75000, mid: 65000 }, { lo: 75000, hi: 100000, mid: 87000 }, { lo: 100000, hi: Infinity, mid: 130000 },
+  ];
+  const histJobs = buckets.map(() => 0);
+  for (const d of data) { if (d.pay != null && d.jobs) { const i = buckets.findIndex(b => d.pay >= b.lo && d.pay < b.hi); if (i >= 0) histJobs[i] += d.jobs; } }
+  const maxH = Math.max(...histJobs);
+  document.getElementById("block3").innerHTML = `<h3>Места по зарплате</h3>
+    <div class="histogram">${histJobs.map((c, i) => `<div class="bar" style="height:${Math.max(2, maxH > 0 ? c / maxH * 100 : 0)}%;background:${payColor(buckets[i].mid, 0.7)}"></div>`).join("")}</div>
+    <div class="hist-labels"><span>$30 тыс.</span><span>$65 тыс.</span><span>$100 тыс.+</span></div>`;
+
+  const tiers = PAY_BANDS.map(t => {
+    let jobs = 0;
+    for (const d of data) { if (d.pay != null && d.jobs && d.pay >= t.min && d.pay < t.max) jobs += d.jobs; }
+    return { ...t, jobs, color: payColor(t.max === Infinity ? 130000 : (t.min + t.max) / 2, 1) };
+  });
+  document.getElementById("block4").innerHTML = `<h3>Уровни зарплат</h3><div class="tier-bar">${renderTiers(tiers, totalJobs, 'pay')}</div>`;
+
+  const byEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d.pay);
+  document.getElementById("block5").innerHTML = `<h3>Зарплата по образованию</h3><div class="hbar-chart">${renderHbars(byEdu.map(g => ({
+    ...g, val: "$" + Math.round(g.avg / 1000) + " тыс.", pct: Math.max(0, Math.min(100, (Math.log(Math.max(25000, g.avg)) - Math.log(25000)) / (Math.log(250000) - Math.log(25000)) * 100)), color: payColor(g.avg, 0.8)
+  })), 'edu')}</div>`;
+
+  const byOl = weightedAvgByGroups(OUTLOOK_TIERS, (d, g) => d.outlook != null && d.outlook >= g.min && d.outlook <= g.max, d => d.pay);
+  document.getElementById("block6").innerHTML = `<h3>Зарплата по прогнозу</h3><div class="hbar-chart">${renderHbars(byOl.map(g => ({
+    ...g, label: g.label.replace(/ \(.*/, ""), val: "$" + Math.round(g.avg / 1000) + " тыс.", pct: Math.max(0, Math.min(100, (Math.log(Math.max(25000, g.avg)) - Math.log(25000)) / (Math.log(250000) - Math.log(25000)) * 100)), color: payColor(g.avg, 0.8)
+  })), 'outlook')}</div>`;
+
+  let totalWages = 0;
+  for (const d of data) { if (d.pay != null && d.jobs) totalWages += d.pay * d.jobs; }
+  document.getElementById("block7").innerHTML = `<h3>Фонд оплаты труда</h3>
+    <div class="stat-big">$${(totalWages / 1e12).toFixed(1)} трлн</div>
+    <div class="stat-label">годовой объем</div>`;
+  document.getElementById("block8").innerHTML = "";
+}
+
+function updateEducationStats(totalJobs) {
+  let bsJobs = 0;
   for (const d of data) {
-    if (d.exposure != null && d.jobs) {
-      weightedSum += d.exposure * d.jobs;
-      weightedCount += d.jobs;
-    }
+    if (d.jobs && ["Bachelor's degree", "Master's degree", "Doctoral or professional degree"].includes(d.education)) bsJobs += d.jobs;
   }
-  const weightedAvg = weightedCount > 0 ? weightedSum / weightedCount : 0;
+  document.getElementById("block2").innerHTML = `<h3>Бакалавриат+</h3>
+    <div class="stat-big"><span style="color:${eduColor(5, 1)}">${(bsJobs / totalJobs * 100).toFixed(0)}%</span></div>
+    <div class="stat-label">от всех рабочих мест</div>`;
+
+  const groups = EDU_GROUPS.map((g, i) => {
+    let jobs = 0;
+    for (const d of data) { if (d.jobs && g.match.includes(d.education)) jobs += d.jobs; }
+    return { ...g, jobs, idx: i };
+  });
+  const maxH = Math.max(...groups.map(g => g.jobs));
+  document.getElementById("block3").innerHTML = `<h3>Места по образованию</h3>
+    <div class="histogram">${groups.map(g => `<div class="bar" style="height:${Math.max(2, maxH > 0 ? g.jobs / maxH * 100 : 0)}%;background:${eduColor(g.idx * 2, 0.7)}"></div>`).join("")}</div>
+    <div class="hist-labels"><span>Школа</span><span>Бакалавр</span><span>Проф.</span></div>`;
+
+  const tiers = groups.map((g, i) => ({ ...g, color: eduColor(i * 2, 1) }));
+  document.getElementById("block4").innerHTML = `<h3>Уровни образования</h3><div class="tier-bar">${renderTiers(tiers, totalJobs, 'edu')}</div>`;
+
+  const payByEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d.pay);
+  document.getElementById("block5").innerHTML = `<h3>Ср. зарплата по уровню</h3><div class="hbar-chart">${renderHbars(payByEdu.map(g => ({
+    ...g, val: "$" + Math.round(g.avg / 1000) + " тыс.", pct: Math.max(0, Math.min(100, (Math.log(Math.max(25000, g.avg)) - Math.log(25000)) / (Math.log(250000) - Math.log(25000)) * 100)), color: payColor(g.avg, 0.8)
+  })), 'edu')}</div>`;
+
+  const olByEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d.outlook);
+  document.getElementById("block6").innerHTML = `<h3>Прогноз по образованию</h3><div class="hbar-chart">${renderHbars(olByEdu.map(g => ({
+    ...g, val: (g.avg > 0 ? "+" : "") + g.avg.toFixed(1) + "%", pct: Math.max(0, Math.min(100, (g.avg + 10) / 30 * 100)), color: outlookColor(g.avg, 0.8)
+  })), 'edu')}</div>`;
+
+  let noDeg = 0;
+  for (const d of data) {
+    if (d.jobs && ["No formal educational credential", "High school diploma or equivalent"].includes(d.education)) noDeg += d.jobs;
+  }
+  document.getElementById("block7").innerHTML = `<h3>Без степени / Школа</h3>
+    <div class="stat-big">${(noDeg / 1e6).toFixed(1)} млн</div>
+    <div class="stat-label">мест без высшего образования</div>`;
+  document.getElementById("block8").innerHTML = "";
+}
+
+function updateExposureStats(totalJobs) {
+  let wS = 0, wC = 0;
+  for (const d of data) { if (d.exposure != null && d.jobs) { wS += d.exposure * d.jobs; wC += d.jobs; } }
+  const avg = wC > 0 ? wS / wC : 0;
+  document.getElementById("block2").innerHTML = `<h3>Ср. влияние ИИ</h3>
+    <div class="stat-big"><span style="color:${exposureColor(avg, 1)}">${avg.toFixed(1)}</span></div>
+    <div class="stat-label">взвешенное, шкала 0–10</div>`;
 
   const histogram = new Array(11).fill(0);
-  for (const d of data) {
-    if (d.exposure != null && d.jobs) histogram[d.exposure] += d.jobs;
-  }
+  for (const d of data) { if (d.exposure != null && d.jobs) histogram[d.exposure] += d.jobs; }
+  const maxH = Math.max(...histogram);
+  document.getElementById("block3").innerHTML = `<h3>Места по влиянию ИИ</h3>
+    <div class="histogram">${histogram.map((c, i) => `<div class="bar" style="height:${Math.max(2, maxH > 0 ? c / maxH * 100 : 0)}%;background:${exposureColor(i, 0.7)}"></div>`).join("")}</div>
+    <div class="hist-labels"><span>0</span><span>5</span><span>10</span></div>`;
 
-  const tiers = [
-    { name: "Минимальное", range: [0, 1], color: exposureColorCSS(0.5, 1) },
-    { name: "Низкое", range: [2, 3], color: exposureColorCSS(2.5, 1) },
-    { name: "Умеренное", range: [4, 5], color: exposureColorCSS(4.5, 1) },
-    { name: "Высокое", range: [6, 7], color: exposureColorCSS(6.5, 1) },
-    { name: "Очень высокое", range: [8, 10], color: exposureColorCSS(9, 1) },
+  const tierDefs = [
+    { label: "Минимальное (0–1)", lo: 0, hi: 1, mid: 0.5 },
+    { label: "Низкое (2–3)", lo: 2, hi: 3, mid: 2.5 },
+    { label: "Умеренное (4–5)", lo: 4, hi: 5, mid: 4.5 },
+    { label: "Высокое (6–7)", lo: 6, hi: 7, mid: 6.5 },
+    { label: "Очень высокое (8–10)", lo: 8, hi: 10, mid: 9 },
   ];
-  for (const tier of tiers) {
-    tier.jobs = data.filter(d => d.exposure != null && d.jobs && d.exposure >= tier.range[0] && d.exposure <= tier.range[1])
-                  .reduce((sum, d) => sum + d.jobs, 0);
-    tier.pct = totalJobs > 0 ? (tier.jobs / totalJobs * 100) : 0;
-  }
+  const tiers = tierDefs.map(t => {
+    let jobs = 0;
+    for (const d of data) { if (d.exposure != null && d.jobs && d.exposure >= t.lo && d.exposure <= t.hi) jobs += d.jobs; }
+    return { ...t, jobs, color: exposureColor(t.mid, 1) };
+  });
+  document.getElementById("block4").innerHTML = `<h3>Уровни влияния</h3><div class="tier-bar">${renderTiers(tiers, totalJobs, 'exposure')}</div>`;
 
-  let wagesExposed = data.filter(d => d.exposure >= 7 && d.jobs && d.pay)
-                         .reduce((sum, d) => sum + (d.jobs * d.pay), 0);
+  const byPay = weightedAvgByGroups(PAY_BANDS, (d, g) => d.pay != null && d.pay >= g.min && d.pay < g.max, d => d.exposure);
+  document.getElementById("block5").innerHTML = `<h3>Влияние ИИ по зарплате</h3><div class="hbar-chart">${renderHbars(byPay.map(g => ({
+    ...g, val: g.avg.toFixed(1), pct: g.avg / 10 * 100, color: exposureColor(g.avg, 0.8)
+  })), 'pay')}</div>`;
 
-  document.getElementById("statTotalJobs").textContent = (totalJobs / 1e6).toFixed(0) + " млн";
-  document.getElementById("statAvgExposure").innerHTML = `<span style="color:${exposureColorCSS(weightedAvg, 1)}">${weightedAvg.toFixed(1)}</span>`;
+  const byEdu = weightedAvgByGroups(EDU_GROUPS, (d, g) => g.match.includes(d.education), d => d.exposure);
+  document.getElementById("block6").innerHTML = `<h3>Влияние ИИ по образованию</h3><div class="hbar-chart">${renderHbars(byEdu.map(g => ({
+    ...g, val: g.avg.toFixed(1), pct: g.avg / 10 * 100, color: exposureColor(g.avg, 0.8)
+  })), 'edu')}</div>`;
 
-  const maxHist = Math.max(...histogram);
-  document.getElementById("histogram").innerHTML = histogram.map((count, i) => {
-    const h = maxHist > 0 ? (count / maxHist * 100) : 0;
-    return `<div class="bar" style="height:${Math.max(2, h)}%;background:${exposureColorCSS(i, 0.7)}" title="${i}: ${formatNumber(count)} мест"></div>`;
-  }).join("");
-
-  document.getElementById("tierBar").innerHTML = tiers.map(t =>
-    `<div class="tier-row interactive-row" data-filter-type="tier" data-val1="${t.range[0]}" data-val2="${t.range[1]}">
-      <div class="tier-color" style="background:${t.color}"></div>
-      <span class="tier-name">${t.name} (${t.range[0]}-${t.range[1]})</span>
-      <span class="tier-jobs">${formatNumber(t.jobs)}</span>
-      <span class="tier-pct">${t.pct.toFixed(0)}%</span>
-    </div>`
-  ).join("");
-
-  const payBands = [
-    { label: "<$35 тыс.", min: 0, max: 35000 },
-    { label: "$35–50 тыс.", min: 35000, max: 50000 },
-    { label: "$50–75 тыс.", min: 50000, max: 75000 },
-    { label: "$75–100 тыс.", min: 75000, max: 100000 },
-    { label: "$100 тыс.+", min: 100000, max: Infinity },
-  ];
-  document.getElementById("payChart").innerHTML = payBands.map(band => {
-    const inBand = data.filter(d => d.exposure != null && d.jobs && d.pay != null && d.pay >= band.min && d.pay < band.max);
-    const wCount = inBand.reduce((sum, d) => sum + d.jobs, 0);
-    const avg = wCount > 0 ? inBand.reduce((sum, d) => sum + (d.exposure * d.jobs), 0) / wCount : 0;
-    return `<div class="hbar-row interactive-row" data-filter-type="pay" data-val1="${band.min}" data-val2="${band.max}">
-      <span class="hbar-label">${band.label}</span>
-      <div class="hbar-track"><div class="hbar-fill" style="width:${avg * 10}%;background:${exposureColorCSS(avg, 0.8)}"></div></div>
-      <span class="hbar-val">${avg.toFixed(1)}</span>
-    </div>`;
-  }).join("");
-
-  const eduGroups = [
-    { label: "Без степени/Школа", match: ["No formal educational credential", "High school diploma or equivalent"] },
-    { label: "Среднее спец./Колледж", match: ["Postsecondary nondegree award", "Some college, no degree", "Associate's degree"] },
-    { label: "Бакалавриат", match: ["Bachelor's degree"] },
-    { label: "Магистратура", match: ["Master's degree"] },
-    { label: "Докторантура/Проф.", match: ["Doctoral or professional degree"] },
-  ];
-  document.getElementById("eduChart").innerHTML = eduGroups.map(grp => {
-    const inGrp = data.filter(d => d.exposure != null && d.jobs && grp.match.includes(d.education));
-    const wCount = inGrp.reduce((sum, d) => sum + d.jobs, 0);
-    const avg = wCount > 0 ? inGrp.reduce((sum, d) => sum + (d.exposure * d.jobs), 0) / wCount : 0;
-    return `<div class="hbar-row interactive-row" data-filter-type="edu" data-val1='${JSON.stringify(grp.match)}'>
-      <span class="hbar-label">${grp.label}</span>
-      <div class="hbar-track"><div class="hbar-fill" style="width:${avg * 10}%;background:${exposureColorCSS(avg, 0.8)}"></div></div>
-      <span class="hbar-val">${avg.toFixed(1)}</span>
-    </div>`;
-  }).join("");
-
-  document.getElementById("statWages").textContent = "$" + (wagesExposed / 1e12).toFixed(1) + " трлн";
+  let wagesExposed = 0;
+  for (const d of data) { if (d.exposure != null && d.exposure >= 7 && d.jobs && d.pay) wagesExposed += d.jobs * d.pay; }
+  document.getElementById("block7").innerHTML = `<h3>Уязвимые зарплаты</h3>
+    <div class="stat-big" style="color:${exposureColor(8, 1)}">$${(wagesExposed / 1e12).toFixed(1)} трлн</div>
+    <div class="stat-label">годовой ФОТ для оценки 7+</div>`;
+  document.getElementById("block8").innerHTML = "";
 }
 
-// ── Event Listeners ────────────────────────────────────────────────────
-document.getElementById('sidebar').addEventListener('click', (e) => {
+// ── Интерактивность и События ──────────────────────────────────────────
+
+function updateClearButton() {
+  const hasAnyFilters = Object.values(activeFilters).some(map => map.size > 0);
+  document.getElementById('clearFiltersBtn').style.display = hasAnyFilters ? 'block' : 'none';
+}
+
+document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+  activeFilters = { exposure: new Map(), outlook: new Map(), pay: new Map(), edu: new Map() };
+  document.querySelectorAll('.interactive-row').forEach(el => el.classList.remove('active'));
+  updateClearButton();
+  draw();
+});
+
+// Делегирование кросс-фильтрации
+document.getElementById('wrapper').addEventListener('click', (e) => {
   const row = e.target.closest('.interactive-row');
   if (!row) return;
 
   const type = row.dataset.filterType;
-  let val1 = row.dataset.val1;
-  const val2 = row.dataset.val2;
+  const val1Raw = row.dataset.val1;
+  const val2Raw = row.dataset.val2;
+  const filterId = getFilterId(type, val1Raw, val2Raw);
 
-  if (currentFilter && currentFilter.type === type && currentFilter.val1 === val1) {
-    currentFilter = null;
+  if (activeFilters[type].has(filterId)) {
+    // Выключение чипа
+    activeFilters[type].delete(filterId);
+    row.classList.remove('active');
   } else {
-    // АРХИТЕКТУРНОЕ ИСПРАВЛЕНИЕ: JSON парсится один раз при клике
+    // Включение чипа
     let parsedVal = null;
-    if (type === 'edu') parsedVal = JSON.parse(val1);
-    else { val1 = Number(val1); }
-    
-    currentFilter = { type, val1, val2: val2 ? Number(val2) : null, parsedVal };
+    let val1 = val1Raw;
+    let val2 = (val2Raw !== '' && val2Raw !== 'undefined') ? Number(val2Raw) : Infinity;
+
+    if (type === 'edu') parsedVal = JSON.parse(val1Raw);
+    else val1 = Number(val1Raw);
+
+    activeFilters[type].set(filterId, { type, val1, val2, parsedVal });
+    row.classList.add('active');
   }
 
-  document.querySelectorAll('.interactive-row').forEach(el => el.classList.remove('active'));
-  if (currentFilter) row.classList.add('active');
-
-  // АРХИТЕКТУРНОЕ ИСПРАВЛЕНИЕ: Сброс стейта ховера при смене фильтра
+  updateClearButton();
   hovered = null;
   hideTooltip();
   draw();
 });
 
+// Управление масштабированием
 document.getElementById('fontToggle').addEventListener('click', (e) => {
   const isLarge = document.body.classList.toggle('large-font');
   e.target.textContent = isLarge ? 'Уменьшить шрифт' : 'Увеличить шрифт';
@@ -743,51 +1038,67 @@ document.getElementById('fontToggle').addEventListener('click', (e) => {
 
 canvas.addEventListener("mousemove", (e) => {
   const hit = hitTest(e.clientX, e.clientY);
-  if (hit !== hovered) {
-    hovered = hit;
-    draw();
-  }
-  if (hovered) {
-    showTooltip(hovered, e.clientX, e.clientY);
-    canvas.style.cursor = "pointer";
-  } else {
-    hideTooltip();
-    canvas.style.cursor = "default";
-  }
+  if (hit !== hovered) { hovered = hit; draw(); }
+  if (hovered) { showTooltip(hovered, e.clientX, e.clientY); canvas.style.cursor = "pointer"; }
+  else { hideTooltip(); canvas.style.cursor = "default"; }
 });
+canvas.addEventListener("click", (e) => { const hit = hitTest(e.clientX, e.clientY); if (hit && hit.url) window.open(hit.url, "_blank"); });
+canvas.addEventListener("mouseleave", () => { hovered = null; hideTooltip(); draw(); });
+function resize() { dpr = window.devicePixelRatio || 1; layout(); draw(); }
 
-canvas.addEventListener("click", (e) => {
-  const hit = hitTest(e.clientX, e.clientY);
-  if (hit && hit.url) window.open(hit.url, "_blank");
-});
+// ── Легенда ────────────────────────────────────────────────────────────
 
-canvas.addEventListener("mouseleave", () => {
-  hovered = null;
-  hideTooltip();
-  draw();
-});
-
-function resize() {
-  dpr = window.devicePixelRatio || 1;
-  layout();
-  draw();
-}
+const LEGEND_CONFIG = {
+  exposure:  { low: "Низкое", high: "Высокое" },
+  outlook:   { low: "Спад", high: "Рост" },
+  pay:       { low: "$25 тыс.", high: "$250 тыс." },
+  education: { low: "Без степени", high: "Докторантура" },
+};
 
 function drawGradientLegend() {
   const c = document.getElementById("gradientLegend");
   const gctx = c.getContext("2d");
   for (let x = 0; x < 80; x++) {
-    const score = (x / 79) * 10;
-    gctx.fillStyle = exposureColorCSS(score, 1);
+    const t = x / 79;
+    gctx.fillStyle = colorMode === "exposure" ? greenRedCSS(t, 1) : greenRedCSS(1 - t, 1);
     gctx.fillRect(x, 0, 1, 8);
   }
+  const cfg = LEGEND_CONFIG[colorMode];
+  document.getElementById("legendLow").textContent = cfg.low;
+  document.getElementById("legendHigh").textContent = cfg.high;
 }
 
-fetch("https://joshkale.github.io/jobs/data.json")
+// ── Смена слоев ────────────────────────────────────────────────────────
+
+document.getElementById("colorToggle").addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn || !btn.dataset.mode) return;
+  
+  colorMode = btn.dataset.mode;
+  document.querySelectorAll("#colorToggle button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  
+  // При смене вкладки DOM перестраивается в updateStats(). 
+  // Мы НЕ сбрасываем activeFilters, чтобы кросс-пересечение сохранялось.
+  // Класс .active заново проставляется генераторами (renderTiers/renderHbars)
+  updateStats();
+  drawGradientLegend();
+  draw();
+  requestAnimationFrame(resize);
+});
+
+// ── Загрузка ───────────────────────────────────────────────────────────
+
+// Используем запасной абсолютный URL для песочницы с "blob:" и "data:"
+const dataUrl = (window.location.protocol === 'blob:' || window.location.protocol === 'data:')
+  ? "https://joshkale.github.io/jobs/data.json"
+  : "data.json";
+
+fetch(dataUrl)
   .then(r => r.json())
   .then(d => {
     data = d;
-    computeStats();
+    updateStats();
     drawGradientLegend();
     resize();
   })
