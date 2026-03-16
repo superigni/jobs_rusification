@@ -1,77 +1,78 @@
-# US Job Market Visualizer
+# Визуализатор рынка труда США
 
-A research tool for visually exploring Bureau of Labor Statistics [Occupational Outlook Handbook](https://www.bls.gov/ooh/) data. This is not a report, a paper, or a serious economic publication — it is a development tool for exploring BLS data visually.
+Инструмент для визуального исследования данных [Справочника по профессиональным перспективам (OOH)](https://www.bls.gov/ooh/) Бюро статистики труда США (BLS). Это не официальный отчет, не научная статья и не экономическая публикация — это инструмент разработки для наглядного изучения данных BLS.
 
-**Live demo: [karpathy.ai/jobs](https://karpathy.ai/jobs/)**
+**Модифицированная демоверсия: [superigni.github.io/jobs_rusification](https://superigni.github.io/jobs_rusification/)**
+**Оригинальная демоверсия: [karpathy.ai/jobs](https://karpathy.ai/jobs/)**
 
-## What's here
+## Что внутри
 
-The BLS OOH covers **342 occupations** spanning every sector of the US economy, with detailed data on job duties, work environment, education requirements, pay, and employment projections. We scraped all of it and built an interactive treemap visualization where each rectangle's **area** is proportional to total employment and **color** shows the selected metric — toggle between BLS projected growth outlook, median pay, education requirements, and AI exposure.
+BLS OOH охватывает **342 профессии** во всех секторах экономики США, предоставляя подробные данные о должностных обязанностях, условиях труда, требованиях к образованию, заработной плате и прогнозах занятости. Произведен полный парсинг этих данных для построения интерактивной визуализации (treemap), где **площадь** каждого прямоугольника пропорциональна общему уровню занятости, а **цвет** отражает выбранную метрику. Доступно переключение между прогнозируемым ростом (BLS), медианной зарплатой, требованиями к образованию и уровнем подверженности влиянию ИИ.
 
-## LLM-powered coloring
+## Цветовое кодирование на базе LLM
 
-The repo includes scrapers, parsers, and a pipeline for writing custom LLM prompts to score and color occupations by any criteria. You write a prompt, the LLM scores each occupation, and the treemap colors accordingly. The "Digital AI Exposure" layer is one example — it estimates how much current AI (which is primarily digital) will reshape each occupation. But you could write a different prompt for any question — e.g. exposure to humanoid robotics, offshoring risk, climate impact — and re-run the pipeline to get a different coloring. See `score.py` for the prompt and scoring pipeline.
+Репозиторий включает парсеры, обработчики и конвейер для написания кастомных промптов LLM, позволяющих оценивать и окрашивать профессии по любым критериям. Пишется промпт, LLM оценивает каждую профессию, и treemap перекрашивается в соответствии с результатами. Слой «Цифровое влияние ИИ» (Digital AI Exposure) — лишь один из примеров. Он оценивает, насколько текущий ИИ (преимущественно цифровой) трансформирует каждую профессию. Допускается написание промптов под любые задачи — например, уязвимость к внедрению человекоподобных роботов, риск офшоринга, влияние на климат — с последующим перезапуском конвейера для получения новой цветовой схемы. Промпт и логика оценки находятся в `score.py`.
 
-**What "AI Exposure" is NOT:**
-- It does **not** predict that a job will disappear. Software developers score 9/10 because AI is transforming their work — but demand for software could easily *grow* as each developer becomes more productive.
-- It does **not** account for demand elasticity, latent demand, regulatory barriers, or social preferences for human workers.
-- The scores are rough LLM estimates (Gemini Flash via OpenRouter), not rigorous predictions. Many high-exposure jobs will be reshaped, not replaced.
+**Чем «Влияние ИИ» НЕ является:**
+* Это **не** прогноз исчезновения профессии. Разработчики ПО получают 9/10, потому что ИИ трансформирует их работу — однако спрос на ПО может легко *вырасти* по мере увеличения продуктивности каждого разработчика.
+* Оценка **не** учитывает эластичность спроса, скрытый спрос, нормативные барьеры или социальные предпочтения в отношении человеческого труда.
+* Баллы — это грубые оценки LLM (Gemini Flash через OpenRouter), а не строгие прогнозы. Многие профессии с высоким уровнем влияния будут трансформированы, а не заменены.
 
-## Data pipeline
+## Конвейер данных (Data pipeline)
 
-1. **Scrape** (`scrape.py`) — Playwright (non-headless, BLS blocks bots) downloads raw HTML for all 342 occupation pages into `html/`.
-2. **Parse** (`parse_detail.py`, `process.py`) — BeautifulSoup converts raw HTML into clean Markdown files in `pages/`.
-3. **Tabulate** (`make_csv.py`) — Extracts structured fields (pay, education, job count, growth outlook, SOC code) into `occupations.csv`.
-4. **Score** (`score.py`) — Sends each occupation's Markdown description to an LLM with a scoring rubric. Each occupation gets an AI Exposure score from 0-10 with a rationale. Results saved to `scores.json`. Fork this to write your own prompts.
-5. **Build site data** (`build_site_data.py`) — Merges CSV stats and AI exposure scores into a compact `site/data.json` for the frontend.
-6. **Website** (`site/index.html`) — Interactive treemap visualization with four color layers: BLS Outlook, Median Pay, Education, and Digital AI Exposure.
+1. **Сбор данных** (`scrape.py`) — Playwright (в режиме с интерфейсом, так как BLS блокирует ботов) скачивает сырой HTML для всех 342 страниц профессий в директорию `html/`.
+2. **Обработка** (`parse_detail.py`, `process.py`) — BeautifulSoup конвертирует сырой HTML в чистые Markdown-файлы в директорию `pages/`.
+3. **Табулирование** (`make_csv.py`) — Извлекает структурированные поля (зарплата, образование, количество рабочих мест, прогноз роста, код SOC) в `occupations.csv`.
+4. **Оценка** (`score.py`) — Отправляет Markdown-описание каждой профессии в LLM вместе с критериями оценки. Каждая профессия получает балл влияния ИИ от 0 до 10 с обоснованием. Результаты сохраняются в `scores.json`. Форкните репозиторий для написания собственных промптов.
+5. **Сборка данных сайта** (`build_site_data.py`) — Объединяет статистику из CSV и баллы влияния ИИ в компактный файл `site/data.json` для фронтенда.
+6. **Веб-сайт** (`site/index.html`) — Интерактивная визуализация (treemap) с четырьмя цветовыми слоями: прогноз BLS, медианная зарплата, образование и цифровое влияние ИИ.
 
-## Key files
+## Ключевые файлы
 
-| File | Description |
+| Файл | Описание |
 |------|-------------|
-| `occupations.json` | Master list of 342 occupations with title, URL, category, slug |
-| `occupations.csv` | Summary stats: pay, education, job count, growth projections |
-| `scores.json` | AI exposure scores (0-10) with rationales for all 342 occupations |
-| `prompt.md` | All data in a single file, designed to be pasted into an LLM for analysis |
-| `html/` | Raw HTML pages from BLS (source of truth, ~40MB) |
-| `pages/` | Clean Markdown versions of each occupation page |
-| `site/` | Static website (treemap visualization) |
+| `occupations.json` | Мастер-список 342 профессий (название, URL, категория, slug) |
+| `occupations.csv` | Сводная статистика: зарплата, образование, количество рабочих мест, прогнозы роста |
+| `scores.json` | Баллы влияния ИИ (0-10) с обоснованием для всех 342 профессий |
+| `prompt.md` | Все данные в одном файле, оптимизированном для вставки в LLM |
+| `html/` | Сырые HTML-страницы с сайта BLS (исходные данные, ~40 МБ) |
+| `pages/` | Очищенные Markdown-версии страницы каждой профессии |
+| `site/` | Статический веб-сайт (визуализация treemap) |
 
-## LLM prompt
+## Промпт для LLM
 
-[`prompt.md`](prompt.md) packages all the data — aggregate statistics, tier breakdowns, exposure by pay/education, BLS growth projections, and all 342 occupations with their scores and rationales — into a single file (~45K tokens) designed to be pasted into an LLM. This lets you have a data-grounded conversation about AI's impact on the job market without needing to run any code. Regenerate it with `uv run python make_prompt.py`.
+Файл [`prompt.md`](prompt.md) упаковывает все данные — агрегированную статистику, разбивку по уровням, распределение влияния по зарплате/образованию, прогнозы роста BLS и все 342 профессии с их баллами и обоснованиями — в единый текстовый массив (~45 тыс. токенов), предназначенный для передачи в LLM. Это позволяет вести предметный диалог о влиянии ИИ на рынок труда без необходимости запускать код. Файл пересобирается командой `uv run python make_prompt.py`.
 
-## Setup
+## Установка
 
 ```
 uv sync
 uv run playwright install chromium
 ```
 
-Requires an OpenRouter API key in `.env`:
+Требуется ключ OpenRouter API key в `.env`:
 ```
 OPENROUTER_API_KEY=your_key_here
 ```
 
-## Usage
+## Использование
 
 ```bash
-# Scrape BLS pages (only needed once, results are cached in html/)
+# Сбор данных со страниц BLS (требуется один раз, кешируется в html/)
 uv run python scrape.py
 
-# Generate Markdown from HTML
+# Генерация Markdown из HTML
 uv run python process.py
 
-# Generate CSV summary
+# Генерация сводного CSV
 uv run python make_csv.py
 
-# Score AI exposure (uses OpenRouter API)
+# Оценка влияния ИИ (использует OpenRouter API)
 uv run python score.py
 
-# Build website data
+# Сборка данных для веб-сайта
 uv run python build_site_data.py
 
-# Serve the site locally
+# Локальный запуск сайта
 cd site && python -m http.server 8000
 ```
